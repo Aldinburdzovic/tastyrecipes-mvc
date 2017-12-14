@@ -1,10 +1,21 @@
+
+
 <?php
 session_start();
     date_default_timezone_set('Europe/Stockholm');
-    include '../../classes/integration/dbhandler.inc.php';
-    
-    
+    include 'classes/integration/dbhandler.inc.php';
+    //echo "123 "; 
+    if(isset($_POST['commentSubmit'])){
+    getComments($conn);
+    }
+    if(isset($_POST['commentDelete'])){
+    getComments($conn);
+    }
+    if(isset($_POST['loadCommentsOnce'])){
+    getComments($conn);
+    }
 function getComments($conn){
+    
     $sql = "SELECT * FROM comments";
     $result = $conn->query($sql);
     while($row = $result->fetch_assoc()){
@@ -19,9 +30,9 @@ function getComments($conn){
             echo "</p> "; 
             if(isset($_SESSION['u_id'])){ 
                 if($_SESSION['u_id'] == $row2['user_id']){
-                   echo "<form id='delete-form' method='POST' action='".deleteComments($conn)."'>
-                    <input type='hidden' name='cid' value='".$row['cid']."'>
-                    <button type='submit' name='commentDelete'>Delete</button>
+                   echo "<form id='delete-form'>
+                    <input type='hidden' name='cid' id='cid' value='".$row['cid']."'>
+                    <button type='submit' onclick='delete' id='del-btn' name='commentDelete'>Delete</button>
                      </form>"; 
                 }
             }
@@ -38,10 +49,12 @@ function deleteComments($conn){
         $cid = $_POST['cid'];
         $sql = "DELETE FROM comments WHERE cid='$cid'";
         $result = $conn->query($sql);
-        header("Location: pancakes.php");
+        //header("Location: meatballs.php");
     }
 }
-        
-        
-    
+
+
+
+
+
     

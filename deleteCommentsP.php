@@ -1,28 +1,29 @@
 <?php
 
-//include 'classes/Controller/Controller.php';
-//use Controller\Controller;
-session_start();
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+include 'classes/integration/dbhandler.inc.php';
+
+$cid = $_POST['cid'];
+        $sql = "DELETE FROM comments2 WHERE cid='$cid'";
+        $result = $conn->query($sql);
+
+/*if(isset($_POST['commentDelete'])){
+        $cid = $_POST['cid'];
+        $sql = "DELETE FROM comments WHERE cid='$cid'";
+        $result = $conn->query($sql);
+    }*/
+        
+   session_start();
     
     require 'Comment.php';
     include 'classes/integration/dbhandler.inc.php';
-
-
-    
-        $uid = $_POST['uid'];
-        $date = $_POST['date'];
-        $message = $_POST['message'];
-        
-        $sql = "INSERT INTO comments (uid, date, message) VALUES ('$uid', '$date', '$message')";
-        $result = $conn->query($sql);
-        
-       // $contr = new Controller();
-	//$contr->setCommentM($uid, $date, $message);
-        
-        
     
     
-    $sql = "SELECT * FROM comments";
+    $sql = "SELECT * FROM comments2";
     $result = $conn->query($sql);
     
     $array = array();
@@ -46,7 +47,4 @@ session_start();
         $array[] = $comment;
         
     }
-    echo json_encode($array);
-        
-        
-    
+    echo json_encode($array);     

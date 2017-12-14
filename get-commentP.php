@@ -1,28 +1,11 @@
 <?php
-
-//include 'classes/Controller/Controller.php';
-//use Controller\Controller;
-session_start();
+    session_start();
     
     require 'Comment.php';
     include 'classes/integration/dbhandler.inc.php';
-
-
-    
-        $uid = $_POST['uid'];
-        $date = $_POST['date'];
-        $message = $_POST['message'];
-        
-        $sql = "INSERT INTO comments (uid, date, message) VALUES ('$uid', '$date', '$message')";
-        $result = $conn->query($sql);
-        
-       // $contr = new Controller();
-	//$contr->setCommentM($uid, $date, $message);
-        
-        
     
     
-    $sql = "SELECT * FROM comments";
+    $sql = "SELECT * FROM comments2";
     $result = $conn->query($sql);
     
     $array = array();
@@ -47,6 +30,6 @@ session_start();
         
     }
     echo json_encode($array);
-        
-        
     
+    
+   

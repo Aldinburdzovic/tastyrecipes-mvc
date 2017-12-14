@@ -26,7 +26,7 @@ class Comments {
         $result = $DBH->setComment($uid, $date, $message, $conn);
        
         
-        header("Location: resources/views/meatballs.php?comment=success");
+        //header("Location: resources/views/meatballs.php?comment=success");
 	exit();
     }
     public function setComP($uid, $date, $message) {
@@ -36,7 +36,7 @@ class Comments {
         $result = $DBH->setCommentP($uid, $date, $message, $conn);
        
         
-        header("Location: resources/views/pancakes.php?comment=success");
+        //header("Location: resources/views/pancakes.php?comment=success");
 	exit();
     }
     

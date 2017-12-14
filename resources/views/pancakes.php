@@ -1,5 +1,5 @@
 <?php
-include '../../getCommentsP.php';
+//include '../../getCommentsP.php';
 ?>
 
 
@@ -9,7 +9,115 @@ include '../../getCommentsP.php';
 		<meta charset="utf-8">
 		<title>Tasty Recepies</title>
                 <link rel="stylesheet" type="text/css" href="../css/tastycss.css">
-		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+                
+               
+        
+        <script>
+            $(document).ready(function()
+                {
+                    $(function(){
+ 
+                        $.ajax({                                      
+                            url: '../../get-commentP.php',                          
+                            data: "",
+                            dataType: 'json',                   
+                            success: function(data)        
+                            {
+                                $('#form1').append("<button id='com-btn' onclick='postComment()' >Comment</button>"); 
+                                for(var i = 0; i < data.length; i++)
+                                {
+                                  var user = data[i].user_uid;              
+                                  date = data[i].date; 
+                                  message = data[i].message;
+                                  deletable = data[i].deletable;
+                                  cid = data[i].cid;
+                                  if(deletable)
+                                  {
+                                       $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message + "<br>"+ "<button id='del-btn' onclick=deleteComment("+cid+")>Delete</button></p>");
+                                  }
+                                  else
+                                  {
+                                    $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message +"</p>"); 
+                                  }
+
+                                }
+                            } 
+                        }); 
+                    }); 
+                });
+                
+                function postComment()
+                 {
+                    var uid = $("#uid").val();
+                    date = $("#date").val();
+                    message = $("#message").val();
+                           
+                     $.ajax({
+                         url: '../../do-commentP.php',
+                         type: 'post',
+                         dataType: 'json',
+                         data:
+                                 {
+                                     uid: uid,
+                                     date: date,
+                                     message: message
+                                 },
+                         success: function (data)
+                                   {
+                                       $('.comment-box1').html(" ");
+                                       for (var i = 0; i < data.length; i++)
+                                       {
+                                           var user = data[i].user_uid;              
+                                            date = data[i].date; 
+                                            message = data[i].message;
+                                            deletable = data[i].deletable;
+                                            cid = data[i].cid;
+                                           if (deletable)
+                                           {
+                                               $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message + "<br>"+ "<button id='del-btn' onclick=deleteComment("+cid+")>Delete</button></p>");
+                                           } else
+                                           {
+                                               $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message +"</p>"); 
+                                           }
+                                       }
+                                   }
+     });
+     }
+                    function deleteComment(cid)
+                           {
+                               $.ajax({
+                               url: '../../deleteCommentsP.php',
+                               type: 'post',
+                               dataType: 'json',
+                                  data:
+                                           {
+                                               'cid': cid,
+                                        
+                                           },
+                                   success: function (data)
+                                   {
+                                       $('.comment-box1').html(" ");
+                                       for (var i = 0; i < data.length; i++)
+                                       {
+                                           var user = data[i].user_uid;              
+                                            date = data[i].date; 
+                                            message = data[i].message;
+                                            deletable = data[i].deletable;
+                                            cid = data[i].cid;
+                                           if (deletable)
+                                           {
+                                               $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message + "<br>"+ "<button id='del-btn' onclick=deleteComment("+cid+")>Delete</button></p>");
+                                           } else
+                                           {
+                                               $('.comment-box1').append("<div class='comment-box'><p><p class='user-date'>" +user+": "+ "<br></p>"+date+ "<br>"+ message +"</p>"); 
+                                           }
+                                       }
+                                   }
+                               });
+                           }
+        </script>
 	</head>
 	<body>
 		<div id="header">
@@ -52,20 +160,23 @@ include '../../getCommentsP.php';
 			<h2>Comments</h2>
 			<?php
                         if (isset($_SESSION['u_id'])) {
-				echo "<form method='POST' action='../../do-commentP.php'>
-                            <input type='hidden' name='uid' value='".$_SESSION['u_id']."'>
-                            <input type='hidden' name='date' value='".date('Y-m-d H:i:s')."'>
-                            <textarea name='message'></textarea><br>
-                            <button id='com-btn' type='submit' name='commentSubmit'>Comment</button>
-                        </form>";
+				echo "<div id='form1' >   
+                            <input type='hidden' name='uid' id='uid' value='".$_SESSION['u_id']."'>
+                            <input type='hidden' name='date' id='date' value='".date('Y-m-d H:i:s')."'>
+                            <textarea name='message' id='message'></textarea><br>
+                            
+                        </div> ";
 			}else{
                             echo '<div id="login-link"><form action="signup.php" method="POST">
 				<button type="submit" name="submit">Login</button>
 				</form>Log in to write a comment</div>';
                         }
-                       
                         
-                        getComments($conn)
+                       
+                        echo"<div class='comment-box1'>";
+                        //getComments($conn);
+                           //<form id='form1' >  </form>   
+                         echo "</div>";
                         ?>
                         
 		</div>
